@@ -8,15 +8,77 @@
 #include "riscv.h"
 #include "lib.h"
 #include "dasm.h"
-#include "elf32lib.h"
 #include "vm.h"
 
-typedef struct block_t {
-    char *body;
-    int entry;
-    int size;
-} block_t;
+char *code_body;
+int code_entry;
+int code_size;
 
+void do_elf_header(Elf32_Ehdr *elf_header) {}
+
+void do_elf_section(char *section_name, char *section_body, Elf32_Shdr *section_header) {
+}
+
+void do_text_section(char *section_body, Elf32_Shdr *section_header) {
+    code_body = section_body;
+    code_size = section_header->sh_size;
+}
+
+void do_sym_section(char *section_body, Elf32_Shdr *section_header, Elf32_Sym *symbols, char *strtab) {
+    // 如果是符號表，則讀取並顯示符號
+    printf("符號表:\n");
+    int num_symbols = section_header->sh_size / sizeof(Elf32_Sym);
+    for (int j = 0; j < num_symbols; j++)
+    {
+        printf("符號: %s, 位址: 0x%08x\n",
+                &strtab[symbols[j].st_name], symbols[j].st_value);
+        if (strcmp(&strtab[symbols[j].st_name], "main") == 0) {
+            code_entry = symbols[j].st_value;
+            printf("   ==> main 的位址在 0x%08x\n", symbols[j].st_value);
+        }
+    }
+    printf("\n\n");
+}
+
+void do_str_tab(char *section_body, Elf32_Shdr *section_header) {}
+
+#include "elf32do.c"
+
+int main(int argc, char **argv)
+{
+    if (argc < 2)
+    {
+        printf("使用方式: %s <ELF 檔案>\n", argv[0]);
+        return 1;
+    }
+
+    do_elf(argv[1]);
+    vm_run(code_body, code_size, code_entry);
+    /*
+    FILE *file = fopen(argv[1], "rb");
+    if (!file)
+    {
+        perror("無法開啟檔案");
+        return 1;
+    }
+
+    Elf32_Ehdr elf_header;
+    fread(&elf_header, 1, sizeof(Elf32_Ehdr), file);
+
+    // dump_elf_header(file, elf_header);
+    // dump_elf_sections(file, elf_header);
+    block_t code_block;
+    load_into_memory(file, elf_header, &code_block);
+    printf("entry=%04x\n", code_block.entry);
+    // disassemble_block(code_block.body, code_block.size);
+    vm_run(code_block.body, code_block.size, code_block.entry);
+    fclose(file);
+    */
+    return 0;
+}
+
+
+/*
 void load_into_memory(FILE *file, Elf32_Ehdr elf_header, block_t *code_block) {
     Elf32_Shdr section_header;
     char *section_names;
@@ -68,32 +130,4 @@ void load_into_memory(FILE *file, Elf32_Ehdr elf_header, block_t *code_block) {
     }
     free(section_names);
 }
-
-int main(int argc, char **argv)
-{
-    if (argc < 2)
-    {
-        printf("使用方式: %s <ELF 檔案>\n", argv[0]);
-        return 1;
-    }
-
-    FILE *file = fopen(argv[1], "rb");
-    if (!file)
-    {
-        perror("無法開啟檔案");
-        return 1;
-    }
-
-    Elf32_Ehdr elf_header;
-    fread(&elf_header, 1, sizeof(Elf32_Ehdr), file);
-
-    // dump_elf_header(file, elf_header);
-    // dump_elf_sections(file, elf_header);
-    block_t code_block;
-    load_into_memory(file, elf_header, &code_block);
-    printf("entry=%04x\n", code_block.entry);
-    // disassemble_block(code_block.body, code_block.size);
-    vm_run(code_block.body, code_block.size, code_block.entry);
-    fclose(file);
-    return 0;
-}
+*/

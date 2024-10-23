@@ -41,7 +41,7 @@ deps := $(OBJS:%.o=%.o.d)
 SHELL_HACK := $(shell mkdir -p $(OUT))
 
 # 可執行檔清單
-EXEC = $(OUT)/dump32 # $(OUT)/vm32 
+EXEC = $(OUT)/dump32 $(OUT)/vm32 
 
 # 預設目標：編譯所有可執行檔
 all: $(EXEC)
@@ -64,6 +64,9 @@ $(OUT)/vm32: $(OBJS_core)
 
 dump_test:
 	./$(OUT)/dump32 test/test1.o
+
+vm_test:
+	./$(OUT)/vm32 test/test1.o
 
 # 清理目標：刪除可執行檔、物件檔與依賴文件
 clean:

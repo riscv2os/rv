@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #define error(...) fprintf(stderr, __VA_ARGS__)
+#define log(...) printf(__VA_ARGS__)
 
 uint32_t decode_little_endian32(const char *bytes);
 
