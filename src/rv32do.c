@@ -273,14 +273,3 @@ static char do_instr(uint32_t instr)
     }
     return type;
 }
-/*
-void do_block(char *block, int size)
-{
-    for (int pc = 0; pc < size; pc += 4)
-    {
-        uint32_t instr = decode_little_endian32(&block[pc]);
-        char type = do_instr(instr);
-        printf("%04x %08x %c %s\n", pc, instr, type, oasm);
-    }
-}
-*/

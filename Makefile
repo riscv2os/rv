@@ -16,7 +16,6 @@ SRC = src
 # 核心部分的物件檔清單
 OBJS_core := \
 	dasm.o \
-	elf32lib.o \
 	lib.o \
 	riscv.o \
 	vm.o

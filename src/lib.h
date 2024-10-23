@@ -1,8 +1,9 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdio.h>
 
-#define error(msg) perror(msg)
+#define error(...) fprintf(stderr, __VA_ARGS__)
 
 uint32_t decode_little_endian32(const char *bytes);
 
