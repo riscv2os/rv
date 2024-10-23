@@ -4,7 +4,7 @@
 #include <elf.h>
 #include "lib.h"
 
-void do_elf_sections(FILE *file, Elf32_Ehdr *elf_header)
+static void do_elf_sections(FILE *file, Elf32_Ehdr *elf_header)
 {
     Elf32_Shdr section_header;
     char *section_names;
@@ -60,7 +60,7 @@ void do_elf_sections(FILE *file, Elf32_Ehdr *elf_header)
     free(section_names);
 }
 
-void do_elf(char *elf_file_name) {
+static void do_elf(char *elf_file_name) {
     FILE *file = fopen(elf_file_name, "rb");
     if (!file)
     {

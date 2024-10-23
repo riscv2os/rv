@@ -23,16 +23,8 @@ OBJS_core := \
 # 把核心物件檔的路徑加入到 $(OUT) 目錄下
 OBJS_core := $(addprefix $(OUT)/, $(OBJS_core))
 
-# 套接字部分的物件檔清單
-OBJS_test := \
-	test1.o \
-	test2.o
-
-# 把 test *.o 的路徑加入到 $(OUT) 目錄下
-OBJS_test := $(addprefix $(TEST)/, $(OBJS_test))
-
 # 所有物件檔的總和
-OBJS := $(OBJS_core) # $(OBJS_test)
+OBJS := $(OBJS_core)
 
 # 依賴文件 (.d 檔) 的清單，用於追蹤依賴關係
 deps := $(OBJS:%.o=%.o.d)
@@ -41,7 +33,7 @@ deps := $(OBJS:%.o=%.o.d)
 SHELL_HACK := $(shell mkdir -p $(OUT))
 
 # 可執行檔清單
-EXEC = $(OUT)/dump32 $(OUT)/vm32 
+EXEC = $(OUT)/rv $(OUT)/dump32 $(OUT)/vm32 
 
 # 預設目標：編譯所有可執行檔
 all: $(EXEC)
@@ -51,16 +43,16 @@ $(OUT)/%.o: $(SRC)/%.c
 	$(CC) -o $@ $(CFLAGS) -c -MMD -MF $@.d $<
 
 # 規則：編譯 vm32 可執行檔，依賴於核心物件檔
-$(OUT)/vm32: $(OBJS_core)
+$(OUT)/rv: $(OBJS_core) src/rv.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+# 規則：編譯 vm32 可執行檔，依賴於核心物件檔
+$(OUT)/vm32: $(OBJS_core) src/vm32.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 # 規則：編譯 dump32，可執行檔，並且指定 source 文件
-$(OUT)/dump32: $(OBJS_core)
-	$(CC) $(CFLAGS) -o $@ src/dump32.c $^
-
-# 規則：編譯 dump32，可執行檔，並且指定 source 文件
-$(OUT)/vm32: $(OBJS_core)
-	$(CC) $(CFLAGS) -o $@ src/vm32.c $^
+$(OUT)/dump32: $(OBJS_core) src/dump32.c
+	$(CC) $(CFLAGS) -o $@ $^
 
 dump_test:
 	./$(OUT)/dump32 test/test1.o

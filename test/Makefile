@@ -13,4 +13,4 @@ test2.o: test2.s
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm $(OBJS)
+	rm $(OBJS) *.o

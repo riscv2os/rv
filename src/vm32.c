@@ -14,17 +14,17 @@ char *code_body;
 int code_entry;
 int code_size;
 
-void do_elf_header(Elf32_Ehdr *elf_header) {}
+static void do_elf_header(Elf32_Ehdr *elf_header) {}
 
-void do_elf_section(char *section_name, char *section_body, Elf32_Shdr *section_header) {
+static void do_elf_section(char *section_name, char *section_body, Elf32_Shdr *section_header) {
 }
 
-void do_text_section(char *section_body, Elf32_Shdr *section_header) {
+static void do_text_section(char *section_body, Elf32_Shdr *section_header) {
     code_body = section_body;
     code_size = section_header->sh_size;
 }
 
-void do_sym_section(char *section_body, Elf32_Shdr *section_header, Elf32_Sym *symbols, char *strtab) {
+static void do_sym_section(char *section_body, Elf32_Shdr *section_header, Elf32_Sym *symbols, char *strtab) {
     // 如果是符號表，則讀取並顯示符號
     printf("符號表:\n");
     int num_symbols = section_header->sh_size / sizeof(Elf32_Sym);
@@ -40,7 +40,7 @@ void do_sym_section(char *section_body, Elf32_Shdr *section_header, Elf32_Sym *s
     printf("\n\n");
 }
 
-void do_str_tab(char *section_body, Elf32_Shdr *section_header) {}
+static void do_str_tab(char *section_body, Elf32_Shdr *section_header) {}
 
 #include "elf32do.c"
 
