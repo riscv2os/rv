@@ -24,6 +24,16 @@ static void do_text_section(char *section_body, Elf32_Shdr *section_header) {
     code_size = section_header->sh_size;
 }
 
+void do_rodata_section(char *section_body, Elf32_Shdr *section_header) {
+    printf(".rodata 段解讀: ....\n");
+    printf("\n\n");
+}
+
+void do_sbss_section(char *section_body, Elf32_Shdr *section_header) {
+    printf(".sbss 段解讀:...\n");
+    printf("\n\n");
+}
+
 static void do_sym_section(char *section_body, Elf32_Shdr *section_header, Elf32_Sym *symbols, char *strtab) {
     // 如果是符號表，則讀取並顯示符號
     printf("符號表:\n");

@@ -1,4 +1,33 @@
 
+(base) cccimac@cccimacdeiMac rv % rv dump -s a.out   
+
+a.out:     file format elf32-littleriscv
+
+Contents of section .text:
+ 0000 130101fd 23268102 13040103 232ea4fc  ....#&......#...
+ 0010 232604fe 93071000 2324f4fe 6f000002  #&......#$..o...
+ 0020 0327c4fe 832784fe b307f700 2326f4fe  .'...'......#&..
+ 0030 832784fe 93871700 2324f4fe 032784fe  .'......#$...'..
+ 0040 8327c4fd e3dee7fc 8327c4fe 13850700  .'.......'......
+ 0050 0324c102 13010103 67800000 130101fe  .$......g.......
+ 0060 232e1100 232c8100 13040102 1305a000  #...#,..........
+ 0070 eff01ff9 2326a4fe 9307800a 93051000  ....#&..........
+ 0080 93070600 73000000 b7170000 23a8e70a  ....s.......#...
+ 0090 93070000 13850700 8320c101 03248101  ......... ...$..
+ 00a0 13010102 67800000                    ....g...        
+Contents of section .rodata:
+ 00a8 68656c6c 6f00                        hello.          
+Contents of section .comment:
+ 0000 4743433a 20286763 38393164 38646332  GCC: (gc891d8dc2
+ 0010 29203133 2e322e30 00                 ) 13.2.0.       
+Contents of section .riscv.attributes:
+ 0000 414d0000 00726973 63760001 43000000  AM...riscv..C...
+ 0010 04100572 76333269 3270315f 6d327030  ...rv32i2p1_m2p0
+ 0020 5f613270 315f6632 70325f64 3270325f  _a2p1_f2p2_d2p2_
+ 0030 7a696373 72327030 5f7a6966 656e6365  zicsr2p0_zifence
+ 0040 69327030 5f7a6d6d 756c3170 3000      i2p0_zmmul1p0.  
+shell:riscv64-unknown-elf-objdump -s a.out 
+
 
 (base) cccimac@cccimacdeiMac rv % rv dump -d a.out         
 

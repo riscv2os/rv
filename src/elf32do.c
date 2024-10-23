@@ -33,6 +33,18 @@ static void do_elf_sections(FILE *file, Elf32_Ehdr *elf_header)
         {
             do_text_section(section_body, &section_header);
         }
+        else if (strcmp(section_name, ".rodata") == 0)
+        {
+            do_rodata_section(section_body, &section_header);
+        }
+        else if (strcmp(section_name, ".rodata") == 0)
+        {
+            do_rodata_section(section_body, &section_header);
+        }
+        else if (strcmp(section_name, ".sbss") == 0)
+        {
+            do_sbss_section(section_body, &section_header);
+        }
         else if (strcmp(section_name, ".symtab") == 0)
         {
             Elf32_Sym *symbols = (Elf32_Sym*) section_body;
