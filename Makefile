@@ -60,6 +60,11 @@ dump_test:
 vm_test:
 	./$(OUT)/vm32 test/test1.o
 
+rv_test:
+	./$(OUT)/rv run32 test/test1.c
+
+test: dump_test vm_test rv_test
+
 # 清理目標：刪除可執行檔、物件檔與依賴文件
 clean:
 	$(RM) $(EXEC) $(OBJS) $(deps)
