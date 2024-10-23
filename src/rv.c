@@ -5,29 +5,76 @@
 #define CC "riscv64-unknown-elf-gcc"
 #define CFLAG32 "-march=rv32g -mabi=ilp32 -nostdlib -Wl,--section-start=.text=0x0 -Wl,-e,main"
 #define VM "./build/vm32"
+#define DUMP "riscv64-unknown-elf-objdump"
+#define DUMP32 "./build/dump32"
+#define SETUP "./shell/setup.sh"
+#define TEST "./shell/test.sh"
+
 char shell_cmd[1000];
 
-#define shell(...) sprintf(shell_cmd, __VA_ARGS__); system(shell_cmd); printf("shell:"); printf(__VA_ARGS__); printf("\n")
+#define shell(...)                   \
+    sprintf(shell_cmd, __VA_ARGS__); \
+    system(shell_cmd);               \
+    printf("shell:");                \
+    printf(__VA_ARGS__);             \
+    printf("\n")
 
-void dispatch(char *op, char *args[], int argc) {
-    char arg_tail[1000], *p=arg_tail;
+void dispatch(char *op, char *args[], int argc)
+{
+    char arg_tail[1000], *p = arg_tail;
 
-    for (int i=0; i<argc; i++) {
+    for (int i = 0; i < argc; i++)
+    {
         sprintf(p, "%s ", args[i]);
         p += strlen(p);
     }
 
-    if (strcmp(op, "cc32")==0) {
+    if (strcmp(op, "cc") == 0)
+    {
+        shell("%s %s", CC, arg_tail);
+    }
+    else if (strcmp(op, "cc32") == 0)
+    {
         shell("%s %s %s", CC, CFLAG32, arg_tail);
     }
-    if (strcmp(op, "run32")==0) {
+    else if (strcmp(op, "dump") == 0)
+    {
+        shell("%s %s", DUMP, arg_tail);
+    }
+    else if (strcmp(op, "dump32") == 0)
+    {
+        shell("%s %s", DUMP32, arg_tail);
+    }
+    else if (strcmp(op, "run32") == 0)
+    {
         shell("%s %s %s", CC, CFLAG32, args[0]);
-        shell("%s %s", VM, "./a.out");        
+        shell("%s %s", VM, "./a.out");
+    }
+    else if (strcmp(op, "vm32") == 0)
+    {
+        shell("%s %s", VM, arg_tail);
+    }
+    else if (strcmp(op, "setup") == 0)
+    {
+        shell("%s", SETUP);
+    }
+    else if (strcmp(op, "test") == 0)
+    {
+        shell("%s", TEST);
+    }
+    else
+    {
+        perror("rv <op> not found error!\n");
     }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     char *op = argv[1];
-
-    dispatch(op, &argv[2], argc-2);
+    if (argc < 2)
+    {
+        perror("rv <op> ... // 必須有 <op>\n");
+        return 1;
+    }
+    dispatch(op, &argv[2], argc - 2);
 }

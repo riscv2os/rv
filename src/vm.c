@@ -11,9 +11,11 @@ int32_t memory[MEM_SIZE];
 #define SYS_PUTS 1
 
 void ecall() { // 系統呼叫
-    if (reg[A0]==SYS_PUTS) {
+    if (reg[A1]==SYS_PUTS) {
         // printf("%s", (char*)(uint64_t)reg[A1]);
-        printf("\nprint string in a1=%d", A1);
+        printf("\necall(%d):print string in a2=x%d=%d\n", reg[A1], A2, reg[A2]);
+    } else {
+        printf("\nunhandled ecall a1=x%d=%d\n", reg[A1], A1);
     }
 }
 
@@ -69,6 +71,7 @@ void exec_instr(uint32_t instr) {
     char asm1[100];
     disassemble(instr, asm1);
     printf("%04x %s\t# ", pc, asm1);
+    reg[0] = 0; // x0 is always 0;
     do_instr(instr);
     printf("\n");
 }
