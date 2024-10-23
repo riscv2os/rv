@@ -1,3 +1,23 @@
+直接把 .text .rodata .sbss 載入到 LMA 去，這樣位址應該就是對的
+
+(base) cccimac@cccimacdeiMac rv % rv dump -h a.out
+
+a.out:     file format elf32-littleriscv
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000a8  00000000  00000000  00001000  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .rodata       00000006  000000a8  000000a8  000010a8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  2 .sbss         00000004  000010b0  000010b0  000010b0  2**2
+                  ALLOC
+  3 .comment      00000019  00000000  00000000  000010ae  2**0
+                  CONTENTS, READONLY
+  4 .riscv.attributes 0000004e  00000000  00000000  000010c7  2**0
+                  CONTENTS, READONLY
+shell:riscv64-unknown-elf-objdump -h a.out 
+
 
 (base) cccimac@cccimacdeiMac rv % rv dump -s a.out   
 
