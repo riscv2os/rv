@@ -1,14 +1,5 @@
 int temp;
 
-/*
-#define PUTS(s) __asm__ ( \
-        "li a7, 7\n" \
-        "la a6, %1\n" \
-        "ecall\n" \
-        : "=r"(temp) \
-        : "r"(s) \
-    )
-*/
 #define PUTS(str) __asm__ ( \
         "li a1, 1\n" \
         "mv %1, a2\n" \
@@ -27,4 +18,5 @@ int sum(int n) {
 int main() {
     int s = sum(10);
     PUTS("hello");
+    temp = s;
 }

@@ -6,6 +6,7 @@
 #define error(...) fprintf(stderr, __VA_ARGS__)
 #define log(...) printf(__VA_ARGS__)
 
+void dump_elf_stab(char *block, int size);
 uint32_t decode_little_endian32(const char *bytes);
 
 // 符號擴展 12 位數

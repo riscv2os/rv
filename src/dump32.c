@@ -18,9 +18,9 @@ void do_elf_header(Elf32_Ehdr *elf_header)
 }
 
 void do_elf_section(char *section_name, char *section_body, Elf32_Shdr *section_header) {
-    printf("段名稱: %-20s ", section_name);
+    printf("段名稱: %s ", section_name);
     printf("段位址: 0x%08x ", section_header->sh_addr);
-    printf("段大小: %8d\n", section_header->sh_size);
+    printf("段大小: %d=0x%x\n", section_header->sh_size, section_header->sh_size);
     printf("整段內容印出:\n");
     for (uint32_t j = 0; j < section_header->sh_size; j++)
     {
@@ -39,11 +39,14 @@ void do_text_section(char *section_body, Elf32_Shdr *section_header) {
 
 void do_rodata_section(char *section_body, Elf32_Shdr *section_header) {
     printf(".rodata 段解讀: ....\n");
+    dump_elf_stab(section_body, section_header->sh_size);
+    /*
     for (uint32_t j = 0; j < section_header->sh_size; j++)
     {
         char ch = section_body[j];
         printf("%c", ch == '\0' ? '/' : ch);
     }
+    */
     printf("\n\n");
 }
 

@@ -1,5 +1,13 @@
 #include "lib.h"
 
+void dump_elf_stab(char *block, int size) {
+    for (int j = 0; j < size; j++)
+    {
+        char ch = block[j];
+        printf("%c", ch == '\0' ? '/' : ch);
+    }
+}
+
 uint32_t decode_little_endian32(const char *bytes) {
     // 根據 little-endian 方式組合 4 個字節
     uint32_t result = 0;
