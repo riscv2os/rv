@@ -91,8 +91,8 @@ void vm_run(char *memory, int size, int entry)
 {
     pc = entry;
     reg[SP] = STACK_START;
-    for (int i=0; i<200; i++)
-    // while (pc < size-4)
+    // for (int i=0; i<200; i++)
+    while (pc < size-4 && pc >= 0)
     {
         uint32_t instr = decode_little_endian32(&memory[pc]);
         pc_new = -1;
