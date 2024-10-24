@@ -2,7 +2,7 @@ int sys_status;
 
 #define EXIT(n) __asm__ ( \
         "li a1, 0\n" \
-        "mv %1, a2\n" \
+        "mv a2, %1\n" \
         "ecall\n" \
         : "=r"(sys_status) \
         : "r"(n) \
@@ -10,7 +10,7 @@ int sys_status;
 
 #define PUTS(str) __asm__ ( \
         "li a1, 1\n" \
-        "mv %1, a2\n" \
+        "mv a2, %1\n" \
         "ecall\n" \
         : "=r"(sys_status) \
         : "r"(str) \

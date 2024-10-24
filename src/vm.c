@@ -7,7 +7,7 @@
 #define MEM_SIZE 10000
 int32_t pc, pc_new;
 int32_t reg[32];
-int32_t memory[MEM_SIZE];
+char memory[MEM_SIZE];
 
 #define SYS_EXIT 0
 #define SYS_PUTS 1
@@ -20,7 +20,8 @@ void ecall() { // 系統呼叫
             break;
 
         case SYS_PUTS: 
-            log("\necall(%d):print string in a2=x%d=%d\n", reg[A1], A2, reg[A2]);
+            // log("\necall(%d):print string in a2=x%d=%d\n", reg[A1], A2, reg[A2]);
+            log("\n%s", (char*) &memory[reg[A2]]);
             break;
 
         default:
@@ -36,7 +37,7 @@ void ecall() { // 系統呼叫
 #define lbu(rd, rs, imm) reg[rd]=*(uint8_t*)&memory[reg[rs]+imm]; log("x[%d]=%d", rd, *(uint8_t*)&memory[reg[rs]+imm])
 #define lhu(rd, rs, imm) reg[rd]=*(uint16_t*)&memory[reg[rs]+imm]; log("x[%d]=%d", rd, *(uint16_t*)&memory[reg[rs]+imm])
 
-#define addi(rd, rs, imm) reg[rd]=reg[rs]+imm; log("x%d=x%d+%d=%d", rd, rs, imm, reg[rd])
+#define addi(rd, rs, imm) reg[rd]=reg[rs]+imm; log("x%d=x%d+%d=%d=0x%x", rd, rs, imm, reg[rd], reg[rd])
 #define slti(rd, rs, imm) reg[rd]=reg[rs]<<imm
 #define sltiu(rd, rs, imm) reg[rd]=reg[rs]<<imm // bug
 #define xori(rd, rs, imm) reg[rd]=reg[rs]^imm

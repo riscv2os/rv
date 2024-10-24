@@ -40,7 +40,9 @@ void do_rodata_section(char *section_body, Elf32_Shdr *section_header)
     assert(section_header->sh_addr + section_header->sh_size < MEMORY_SIZE);
     memcpy(&memory[section_header->sh_addr], section_body, section_header->sh_size);
     printf(".rodata :起始位址 0x%x 大小 0x%x\n內容\n", section_header->sh_addr, section_header->sh_size);
-    dump_elf_stab(section_body, section_header->sh_size);
+    // dump_elf_stab(section_body, section_header->sh_size);
+    dump_elf_stab(&memory[section_header->sh_addr], section_header->sh_size);
+    printf("...\n%s\n", &memory[section_header->sh_addr]);
     printf("\n\n");
 }
 
