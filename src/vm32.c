@@ -68,6 +68,6 @@ int main(int argc, char **argv)
     }
 
     do_elf(argv[1]);
-    // vm_run(memory, MEMORY_SIZE, code_entry);
+    vm_run(memory, MEMORY_SIZE, code_entry);
     return 0;
 }

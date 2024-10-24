@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "lib.h"
 #include "dasm.h"
 #include "riscv.h"
@@ -8,14 +9,22 @@ int32_t pc, pc_new;
 int32_t reg[32];
 int32_t memory[MEM_SIZE];
 
+#define SYS_EXIT 0
 #define SYS_PUTS 1
 
 void ecall() { // 系統呼叫
-    if (reg[A1]==SYS_PUTS) {
-        // printf("%s", (char*)(uint64_t)reg[A1]);
-        printf("\necall(%d):print string in a2=x%d=%d\n", reg[A1], A2, reg[A2]);
-    } else {
-        printf("\nunhandled ecall a1=x%d=%d\n", reg[A1], A1);
+    switch (reg[A1]) {
+        case SYS_EXIT:
+            log("exit(%d)\n", reg[A2]);
+            exit(reg[A2]);
+            break;
+
+        case SYS_PUTS: 
+            log("\necall(%d):print string in a2=x%d=%d\n", reg[A1], A2, reg[A2]);
+            break;
+
+        default:
+            log("\nunhandled ecall a1=x%d=%d\n", reg[A1], A1);
     }
 }
 
@@ -82,7 +91,8 @@ void vm_run(char *memory, int size, int entry)
 {
     pc = entry;
     reg[SP] = STACK_START;
-    while (pc < size-4)
+    for (int i=0; i<200; i++)
+    // while (pc < size-4)
     {
         uint32_t instr = decode_little_endian32(&memory[pc]);
         pc_new = -1;
