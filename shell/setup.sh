@@ -8,7 +8,7 @@ if [[ "$OS_TYPE" == "Linux" ]]; then
         echo "=> use yum as installer"
     elif command -v apt-get >/dev/null 2>&1; then
         echo "=> use apt-get as installer"
-        sudo apt install qemu gcc-riscv64-unknown-elf qemu-user-static gcc-riscv64-linux-gnu
+        sudo apt install qemu-system qemu-user-static gcc-riscv64-unknown-elf gcc-riscv64-linux-gnu
     elif command -v pacman >/dev/null 2>&1; then
         echo "=> use pacman as installer"
     else

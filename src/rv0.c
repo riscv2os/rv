@@ -3,11 +3,27 @@
 #include <string.h>
 
 #define CC_S "riscv64-unknown-elf-gcc"
-#define CFLAG0 "-march=rv32g -mabi=ilp32 -nostdlib -Wl,--section-start=.text=0x0 -Wl,-e,main"
-#define VM "qemu-user-static"
-#define VM0 "./build/vm32"
-#define DUMP "riscv64-unknown-elf-objdump"
-#define DUMP0 "./build/dump0"
+#define CC_U "riscv64-linux-gnu-gcc"
+#define CC CC_U
+#define CC_0 CC_S
+
+// "gcc-riscv64-linux-gnu"
+#define CFLAG_U "-static"
+#define CFLAG_S ""
+#define CFLAG CFLAG_U
+#define CFLAG_0 "-march=rv32g -mabi=ilp32 -nostdlib -Wl,--section-start=.text=0x0 -Wl,-e,main"
+
+#define VM_S "qemu-system-riscv32" 
+#define VM_U "qemu-riscv64"
+// #define VM_U "qemu-riscv32-static" 
+#define VM VM_U 
+#define VM_0 "./build/vm32"
+
+#define DUMP_S "riscv64-unknown-elf-objdump"
+#define DUMP_U "riscv64-linux-gnu-objdump"
+#define DUMP DUMP_U
+#define DUMP_0 "./build/dump0"
+
 #define SETUP "./shell/setup.sh"
 #define TEST "./shell/test.sh"
 
@@ -32,28 +48,49 @@ void dispatch(char *op, char *args[], int argc)
 
     if (strcmp(op, "cc") == 0)
     {
-        shell("%s %s", CC, arg_tail);
+        shell("%s %s %s", CC, CFLAG, arg_tail);
     }
-    else if (strcmp(op, "cc32") == 0)
+    else if (strcmp(op, "cc.u") == 0)
     {
-        shell("%s %s %s", CC, CFLAG32, arg_tail);
+        shell("%s %s %s", CC_U, CFLAG_U, arg_tail);
+    }
+    else if (strcmp(op, "cc.s") == 0)
+    {
+        shell("%s %s %s", CC_S, CFLAG_S, arg_tail);
+    }
+    else if (strcmp(op, "cc.0") == 0)
+    {
+        shell("%s %s %s", CC_0, CFLAG_0, arg_tail);
     }
     else if (strcmp(op, "dump") == 0)
     {
         shell("%s %s", DUMP, arg_tail);
     }
-    else if (strcmp(op, "dump32") == 0)
+    else if (strcmp(op, "dump.0") == 0)
     {
-        shell("%s %s", DUMP32, arg_tail);
+        shell("%s %s", DUMP_0, arg_tail);
     }
-    else if (strcmp(op, "run32") == 0)
+    else if (strcmp(op, "run.0") == 0)
     {
-        shell("%s %s %s", CC, CFLAG32, args[0]);
-        shell("%s %s", VM, "./a.out");
+        shell("%s %s %s", CC_0, CFLAG_0, args[0]);
+        shell("%s %s", VM_0, "./a.out");
     }
-    else if (strcmp(op, "vm32") == 0)
+    else if (strcmp(op, "run.u") == 0)
     {
-        shell("%s %s", VM, arg_tail);
+        shell("%s %s %s", CC_U, CFLAG_U, args[0]);
+        shell("%s %s", VM_U, "./a.out");
+    }
+    else if (strcmp(op, "vm.0") == 0)
+    {
+        shell("%s %s", VM_0, arg_tail);
+    }
+    else if (strcmp(op, "vm.u") == 0)
+    {
+        shell("%s %s", VM_U, arg_tail);
+    }
+    else if (strcmp(op, "vm.s") == 0)
+    {
+        shell("%s %s", VM_S, arg_tail);
     }
     else if (strcmp(op, "setup") == 0)
     {
@@ -65,7 +102,7 @@ void dispatch(char *op, char *args[], int argc)
     }
     else
     {
-        perror("rv <op> not found error!\n");
+        perror("rv0 <op> not found error!\n");
     }
 }
 
