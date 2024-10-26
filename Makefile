@@ -33,35 +33,37 @@ deps := $(OBJS:%.o=%.o.d)
 SHELL_HACK := $(shell mkdir -p $(OUT))
 
 # 可執行檔清單
-EXEC = $(OUT)/rv $(OUT)/dump32 $(OUT)/vm32 
+EXEC = $(OUT)/rv0 $(OUT)/dump0 $(OUT)/vm0 
 
 # 預設目標：編譯所有可執行檔
 all: $(EXEC)
+
 
 # 規則：將 C 源文件編譯為目標文件，並生成依賴文件 (.d)
 $(OUT)/%.o: $(SRC)/%.c
 	$(CC) -o $@ $(CFLAGS) -c -MMD -MF $@.d $<
 
-# 規則：編譯 vm32 可執行檔，依賴於核心物件檔
-$(OUT)/rv: $(OBJS_core) src/rv.c
+# 規則：編譯 vm0 可執行檔，依賴於核心物件檔
+$(OUT)/rv0: $(OBJS_core) src/rv0.c
+	$(CC) $(CFLAGS) -o $@ $^
+	cp $(OUT)/rv0 rv0
+
+# 規則：編譯 vm0 可執行檔，依賴於核心物件檔
+$(OUT)/vm0: $(OBJS_core) src/vm0.c
 	$(CC) $(CFLAGS) -o $@ $^
 
-# 規則：編譯 vm32 可執行檔，依賴於核心物件檔
-$(OUT)/vm32: $(OBJS_core) src/vm32.c
-	$(CC) $(CFLAGS) -o $@ $^
-
-# 規則：編譯 dump32，可執行檔，並且指定 source 文件
-$(OUT)/dump32: $(OBJS_core) src/dump32.c
+# 規則：編譯 dump0，可執行檔，並且指定 source 文件
+$(OUT)/dump0: $(OBJS_core) src/dump0.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 dump_test:
-	./$(OUT)/dump32 test/test1.o
+	./$(OUT)/dump0 test/test1.o
 
 vm_test:
-	./$(OUT)/vm32 test/test1.o
+	./$(OUT)/vm0 test/test1.o
 
 rv_test:
-	./$(OUT)/rv run32 test/test1.c
+	./$(OUT)/rv0 run0 test/test1.c
 
 test: dump_test vm_test rv_test
 

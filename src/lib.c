@@ -23,11 +23,11 @@ uint32_t decode_little_endian32(const char *bytes) {
 // 符號擴展 12 位數
 int32_t sign_extend_12(int32_t imm)
 {
-    return (imm & 0x800) ? (imm | 0xFFFFF000) : imm;
+    return (imm & 0x800) ? (imm | (int32_t)0xFFFFF000) : imm;
 }
 
 // 符號擴展 20 位數
 int32_t sign_extend_20(int32_t imm)
 {
-    return (imm & 0x80000) ? (imm | 0xFFF00000) : imm;
+    return (imm & 0x80000) ? (imm | (int32_t)0xFFF00000) : imm;
 }

@@ -5,9 +5,9 @@
 #include "riscv.h"
 
 #define MEM_SIZE 10000
-int32_t pc, pc_new;
-int32_t reg[32];
-char memory[MEM_SIZE];
+static int32_t pc, pc_new;
+static int32_t reg[32];
+static char memory[MEM_SIZE];
 
 #define SYS_EXIT 0
 #define SYS_PUTS 1
@@ -53,12 +53,12 @@ void ecall() { // 系統呼叫
 
 #define add(rd, rs1, rs2) reg[rd]=reg[rs1]+reg[rs2]
 #define sub(rd, rs1, rs2) reg[rd]=reg[rs1]-reg[rs2]
-#define sll(rd, rs1, rs2) reg[rs1] << (reg[rs2]&0x1F); 
+#define sll(rd, rs1, rs2) reg[rd]=reg[rs1] << (reg[rs2]&0x1F); 
 #define slt(rd, rs1, rs2) reg[rd]=reg[rs1]<reg[rs2]
-#define sltu(rd, rs1, rs2) (uint32_t)reg[rs1] < (uint32_t)reg[rs2]
+#define sltu(rd, rs1, rs2) reg[rd]=(uint32_t)reg[rs1] < (uint32_t)reg[rs2]
 #define xor(rd, rs1, rs2) reg[rd]=reg[rs1]^reg[rs2]
-#define srl(rd, rs1, rs2) (uint32_t)reg[rs1] >> (reg[rs2]&0x1F)
-#define sra(rd, rs1, rs2) reg[rs1] >> (reg[rs2]&0x1F)
+#define srl(rd, rs1, rs2) reg[rd]=(uint32_t)reg[rs1] >> (reg[rs2]&0x1F)
+#define sra(rd, rs1, rs2) reg[rd] = reg[rs1] >> (reg[rs2]&0x1F)
 #define or(rd, rs1, rs2) reg[rd]=reg[rs1]|reg[rs2]
 #define and(rd, rs1, rs2) reg[rd]=reg[rs1]&reg[rs2]
 

@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define CC "riscv64-unknown-elf-gcc"
-#define CFLAG32 "-march=rv32g -mabi=ilp32 -nostdlib -Wl,--section-start=.text=0x0 -Wl,-e,main"
-#define VM "./build/vm32"
+#define CC_S "riscv64-unknown-elf-gcc"
+#define CFLAG0 "-march=rv32g -mabi=ilp32 -nostdlib -Wl,--section-start=.text=0x0 -Wl,-e,main"
+#define VM "qemu-user-static"
+#define VM0 "./build/vm32"
 #define DUMP "riscv64-unknown-elf-objdump"
-#define DUMP32 "./build/dump32"
+#define DUMP0 "./build/dump0"
 #define SETUP "./shell/setup.sh"
 #define TEST "./shell/test.sh"
 
-char shell_cmd[1000];
+char shell_cmd[1024];
 
 #define shell(...)                   \
     sprintf(shell_cmd, __VA_ARGS__); \
@@ -21,7 +22,7 @@ char shell_cmd[1000];
 
 void dispatch(char *op, char *args[], int argc)
 {
-    char arg_tail[1000], *p = arg_tail;
+    char arg_tail[800], *p = arg_tail;
 
     for (int i = 0; i < argc; i++)
     {
