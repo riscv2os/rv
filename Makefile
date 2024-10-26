@@ -62,8 +62,11 @@ dump_test:
 vm_test:
 	./$(OUT)/vm0 test/test1.o
 
-rv_test:
-	./$(OUT)/rv0 run0 test/test1.c
+run_test:
+	./$(OUT)/rv0 run.u test/test1_u.c
+	./$(OUT)/rv0 run.u test/test2_u.s
+	./$(OUT)/rv0 run.s test/test1_s.s
+	./$(OUT)/rv0 run.0 test/test1_0.c
 
 test: dump_test vm_test rv_test
 

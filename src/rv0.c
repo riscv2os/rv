@@ -8,16 +8,20 @@
 #define CC_0 CC_S
 
 // "gcc-riscv64-linux-gnu"
-#define CFLAG_U "-static"
-#define CFLAG_S ""
-#define CFLAG CFLAG_U
-#define CFLAG_0 "-march=rv32g -mabi=ilp32 -nostdlib -Wl,--section-start=.text=0x0 -Wl,-e,main"
+#define CC_U_FLAG "-static"
+#define CC_S_FLAG "-march=rv32g -mabi=ilp32 -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -T./ld/riscv32.ld"
+#define CC_FLAG CC_U_FLAG
+#define CC_0_FLAG "-march=rv32g -mabi=ilp32 -nostdlib -Wl,--section-start=.text=0x0 -Wl,-e,main"
 
 #define VM_S "qemu-system-riscv32" 
 #define VM_U "qemu-riscv64"
 // #define VM_U "qemu-riscv32-static" 
 #define VM VM_U 
 #define VM_0 "./build/vm32"
+
+#define VM_S_FLAG "-nographic -machine virt -bios none -kernel"
+#define VM_U_FLAG ""
+#define VM_0_FLAG ""
 
 #define DUMP_S "riscv64-unknown-elf-objdump"
 #define DUMP_U "riscv64-linux-gnu-objdump"
@@ -26,6 +30,15 @@
 
 #define SETUP "./shell/setup.sh"
 #define TEST "./shell/test.sh"
+
+/*
+riscv64-unknown-elf-gcc -march=rv32g -mabi=ilp32 -static -mcmodel=medany \
+  -fvisibility=hidden -nostdlib -nostartfiles -Thello.ld -I. \
+  ../hello.s -o hello.elf
+
+qemu-system-riscv32 -nographic -machine virt -bios none -kernel hello.elf
+
+*/
 
 char shell_cmd[1024];
 
@@ -48,19 +61,19 @@ void dispatch(char *op, char *args[], int argc)
 
     if (strcmp(op, "cc") == 0)
     {
-        shell("%s %s %s", CC, CFLAG, arg_tail);
+        shell("%s %s %s", CC, CC_FLAG, arg_tail);
     }
     else if (strcmp(op, "cc.u") == 0)
     {
-        shell("%s %s %s", CC_U, CFLAG_U, arg_tail);
+        shell("%s %s %s", CC_U, CC_U_FLAG, arg_tail);
     }
     else if (strcmp(op, "cc.s") == 0)
     {
-        shell("%s %s %s", CC_S, CFLAG_S, arg_tail);
+        shell("%s %s %s", CC_S, CC_S_FLAG, arg_tail);
     }
     else if (strcmp(op, "cc.0") == 0)
     {
-        shell("%s %s %s", CC_0, CFLAG_0, arg_tail);
+        shell("%s %s %s", CC_0, CC_0_FLAG, arg_tail);
     }
     else if (strcmp(op, "dump") == 0)
     {
@@ -72,25 +85,30 @@ void dispatch(char *op, char *args[], int argc)
     }
     else if (strcmp(op, "run.0") == 0)
     {
-        shell("%s %s %s", CC_0, CFLAG_0, args[0]);
+        shell("%s %s %s", CC_0, CC_0_FLAG, args[0]);
         shell("%s %s", VM_0, "./a.out");
     }
     else if (strcmp(op, "run.u") == 0)
     {
-        shell("%s %s %s", CC_U, CFLAG_U, args[0]);
-        shell("%s %s", VM_U, "./a.out");
+        shell("%s %s %s", CC_U, CC_U_FLAG, args[0]);
+        shell("%s %s %s", VM_U, VM_U_FLAG, "./a.out");
+    }
+    else if (strcmp(op, "run.s") == 0)
+    {
+        shell("%s %s %s", CC_S, CC_S_FLAG, args[0]);
+        shell("%s %s %s", VM_S, VM_S_FLAG, "./a.out");
     }
     else if (strcmp(op, "vm.0") == 0)
     {
-        shell("%s %s", VM_0, arg_tail);
+        shell("%s %s %s", VM_0, VM_0_FLAG, arg_tail);
     }
     else if (strcmp(op, "vm.u") == 0)
     {
-        shell("%s %s", VM_U, arg_tail);
+        shell("%s %s %s", VM_U, VM_U_FLAG, arg_tail);
     }
     else if (strcmp(op, "vm.s") == 0)
     {
-        shell("%s %s", VM_S, arg_tail);
+        shell("%s %s %s", VM_S, VM_S_FLAG, arg_tail);
     }
     else if (strcmp(op, "setup") == 0)
     {
@@ -111,7 +129,7 @@ int main(int argc, char *argv[])
     char *op = argv[1];
     if (argc < 2)
     {
-        perror("rv <op> ... // 必須有 <op>\n");
+        perror("rv0 <op> ... // 必須有 <op>\n");
         return 1;
     }
     dispatch(op, &argv[2], argc - 2);

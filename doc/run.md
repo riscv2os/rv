@@ -1,3 +1,8 @@
+root@localhost:~/rv# ./rv0 run.u test/test1_u.c
+shell:riscv64-linux-gnu-gcc -static test/test1_u.c
+Hello!
+shell:qemu-riscv64 ./a.out
+
 root@localhost:~/rv# ./rv0 run.u test/test2_u.s
 shell:riscv64-linux-gnu-gcc -static test/test2_u.s
 Hello, world
